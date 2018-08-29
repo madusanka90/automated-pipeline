@@ -37,6 +37,12 @@ pipeline {
                     steps {
                         sh "sshpass -p "tomcat" scp **/target/*.war tomcat@${params.tomcat_stg}:/opt/middleware/tomcat/apache-tomcat-8.5.33/webapps"
                     }
+                }
+
+                stage ("Deploy to Production"){
+                    steps {
+                        sh "sshpass -p "tomcat" scp **/target/*.war tomcat@${params.tomcat_prd}:/opt/middleware/tomcat/apache-tomcat-8.5.33/webapps"
+                    }
                 }                
             }
         }      
