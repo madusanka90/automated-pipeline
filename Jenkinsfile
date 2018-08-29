@@ -10,6 +10,22 @@ pipeline {
          pollSCM('* * * * *') // Polling Source Control
      }
 
+    tools { 
+        maven 'local_maven' 
+        jdk 'local_java' 
+    }
+    
+    stages{
+        stage ('Initialize') {
+            steps {
+                sh '''
+                    echo "PATH = ${PATH}"
+                    echo "MAVEN_HOME = ${MAVEN_HOME}"
+                ''' 
+            }
+        }
+
+
 stages{
         stage('Build'){
             steps {
@@ -33,7 +49,7 @@ stages{
 
                 stage ("Deploy to Production"){
                     steps {
-                        /bin/bash "sshpass -p "tomcat" scp test tomcat@${params.tomcat_prd}:/opt/middleware/tomcat/apache-tomcat-8.5.33/webapps"
+                        sh "sshpass -p "tomcat" scp test tomcat@${params.tomcat_prd}:/opt/middleware/tomcat/apache-tomcat-8.5.33/webapps"
                     }
                 }
             }
