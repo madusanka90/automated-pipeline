@@ -1,8 +1,12 @@
 pipeline {
     agent any
-    tools { 
-        maven 'local_maven' 
-        jdk 'local_java' 
+    parameters {
+        string(name: 'tomcat_stg', default_value: '52.91.26.64', description: 'Staging Server')
+        string(name: 'tomcat_prd', default_value: '54.227.125.20', description: 'Production Server')
+    }
+
+    triggers {
+        pollSCM('* * * * *')
     }
 
     stages{
@@ -27,29 +31,14 @@ pipeline {
             }
         }
 
-        stage ('Deploy to Staging'){
-            steps {
-                build job: 'pipeline_deploy_to_stg'
+        stage ('Deployments'){
+            parallel{
+                stage ('Deploy to Staging'){
+                    steps {
+                        sh "sshpass -p "tomcat" scp **/target/*.war tomcat@${params.tomcat_stg}:/opt/middleware/tomcat/apache-tomcat-8.5.33/webapps"
+                    }
+                }                
             }
-        }
-
-        stage('Deploy to Production'){
-            steps {
-                timeout(time:5, unit:'DAYS'){
-                    input message:'Approve Production Deployment?'
-                }
-
-                build job: 'pipeline_deploy_to_prod'
-            }
-            post {
-                success {
-                    echo 'Release deployed to production'
-                }
-                
-                failure {
-                    echo 'Production Release Failed'
-                }
-            }
-        }
+        }      
     }
 }
