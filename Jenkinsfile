@@ -15,17 +15,6 @@ pipeline {
         jdk 'local_java' 
     }
     
-    stages{
-        stage ('Initialize') {
-            steps {
-                sh '''
-                    echo "PATH = ${PATH}"
-                    echo "MAVEN_HOME = ${MAVEN_HOME}"
-                ''' 
-            }
-        }
-
-
 stages{
         stage('Build'){
             steps {
@@ -54,6 +43,5 @@ stages{
                 }
             }
         }
-    }
-}
+    
 }
