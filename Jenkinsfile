@@ -2,8 +2,8 @@ pipeline {
     agent any
     
     parameters { 
-         string(name: 'tomcat_stg', defaultValue: '52.91.26.64', description: 'Staging Server')
-         string(name: 'tomcat_prod', defaultValue: '54.227.125.20', description: 'Production Server')
+         string(name: 'tomcat_stg', defaultValue: '34.207.68.248', description: 'Staging Server')
+         string(name: 'tomcat_prod', defaultValue: '34.207.70.227', description: 'Production Server')
     } 
 
     triggers {
@@ -33,14 +33,14 @@ stages{
                 stage ('Deploy to Staging'){
                     steps {
                         echo "environment:${params.tomcat_stg}"
-                        sh "sshpass -p 'tomcat' scp test tomcat@${params.tomcat_stg}:/opt/middleware/tomcat/apache-tomcat-8.5.33/webapps"
+                        sh "sshpass -p 'tomcat' scp **/target/*.war tomcat@${params.tomcat_stg}:/opt/middleware/tomcat/apache-tomcat-8.5.33/webapps"
                     }
                 }
 
                 stage ("Deploy to Production"){
                     steps {
                         echo "environment:${params.tomcat_prd}"
-                        sh "sshpass -p 'tomcat' scp test tomcat@${params.tomcat_prd}:/opt/middleware/tomcat/apache-tomcat-8.5.33/webapps"
+                        sh "sshpass -p 'tomcat' scp **/target/*.war tomcat@${params.tomcat_prd}:/opt/middleware/tomcat/apache-tomcat-8.5.33/webapps"
                     }
                 }
             }
