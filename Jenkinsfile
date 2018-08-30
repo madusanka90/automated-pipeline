@@ -39,8 +39,8 @@ stages{
 
                 stage ("Deploy to Production"){
                     steps {
-                        echo "environment:${params.tomcat_prd}"
-                        sh "sshpass -p 'tomcat' scp **/target/*.war tomcat@${params.tomcat_prd}:'/opt/middleware/tomcat/apache-tomcat-8.5.33/webapps'"
+                        echo "environment:${params.tomcat_prod}"
+                        sh "sshpass -p 'tomcat' scp **/target/*.war tomcat@${params.tomcat_prod}:'/opt/middleware/tomcat/apache-tomcat-8.5.33/webapps'"
                     }
                 }
             }
